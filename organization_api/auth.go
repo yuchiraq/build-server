@@ -2,6 +2,7 @@ package organization_api
 
 import (
 	"net/http"
+	"fmt"
 
 	"build-app/base"
 	_ "build-app/base"
@@ -10,7 +11,7 @@ import (
 func Auth(w http.ResponseWriter, r *http.Request) {
 
 	go fmt.Println(base.TimeNow() + "||-->>" + r.RemoteAddr + " GET auth")
-	endl := "|||"
+	//endl := "|||"
 	code := r.URL.Query().Get("login")
 	password := r.URL.Query().Get("pass")
 
