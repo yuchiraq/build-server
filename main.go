@@ -23,7 +23,7 @@ import (
 }*/
 
 // DataBaseConn /*tcp(34.69.28.110)*/
-var DataBaseConn = "root:ekran11series@/beats"
+var DataBaseConn = "chiraq:ekran11Series@/building"
 
 func main() {
 
@@ -46,6 +46,7 @@ func main() {
 		defer db.Close()
 		fmt.Fprintf(w, "All is good, bro")
 	})
+	http.HandleFunc("/auth", organization_api.Auth)
 	http.HandleFunc("/tracks/all", organization_api.All)
 
 	log.Fatal(http.ListenAndServe(":8080", nil))

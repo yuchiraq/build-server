@@ -1,3 +1,3 @@
-package tracks_api
+package 	organization_api
 
-var DataBaseConn = "root:ekran11series@/beats"
+var DataBaseConn = "chiraq:ekran11Series@/building"
