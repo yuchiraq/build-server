@@ -1,6 +1,7 @@
 package organization_api 
 
 import (
+	"database/sql"
 	"net/http"
 	"fmt"
 
@@ -14,7 +15,7 @@ func Auth(w http.ResponseWriter, r *http.Request) {
 	go fmt.Println(base.TimeNow() + "||-->>" + r.RemoteAddr + " GET auth")
 	endl := "|||"
 	login := r.URL.Query().Get("login")
-	password := r.URL.Query().Get("pass")
+	//password := r.URL.Query().Get("pass")
 
 	db, err := sql.Open("mysql", DataBaseConn)
 
