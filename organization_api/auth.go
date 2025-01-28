@@ -5,14 +5,15 @@ import (
 	"fmt"
 
 	"build-app/base"
-	_ "build-app/base"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func Auth(w http.ResponseWriter, r *http.Request) {
 
 	go fmt.Println(base.TimeNow() + "||-->>" + r.RemoteAddr + " GET auth")
-	//endl := "|||"
-	code := r.URL.Query().Get("login")
+	endl := "|||"
+	login := r.URL.Query().Get("login")
 	password := r.URL.Query().Get("pass")
 
 	db, err := sql.Open("mysql", DataBaseConn)
@@ -23,7 +24,7 @@ func Auth(w http.ResponseWriter, r *http.Request) {
 	}
 
 	defer db.Close()
-	results, err := db.Query("SELECT password FROM users WHERE password = '" + password + "'")
+	results, err := db.Query("SELECT password FROM users WHERE login = '" + login + "'")
 
 	if err != nil {
 		fmt.Println("Err > ", err.Error())
