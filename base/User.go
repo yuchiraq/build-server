@@ -7,5 +7,5 @@ type Track struct {
 	FirstName      string `json:"firstName"`
 	SecondName       string `json:"secondName"`
 	LastName        string `json:"lastName"`
-	CompanyID       string `json:"companyID"
+	CompanyID       string `json:"companyID"`
 }
