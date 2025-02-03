@@ -11,7 +11,7 @@ import (
 
 	"log"
 	"github.com/gin-gonic/gin"
-	"os"
+	//"os"
 	_ "github.com/go-sql-driver/mysql"
 )
 
