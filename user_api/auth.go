@@ -1,4 +1,4 @@
-package handlers
+package user_api
 
 import (
 	"database/sql"
