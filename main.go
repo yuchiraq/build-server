@@ -7,7 +7,7 @@ import (
 	"build-app/base"
 	"build-app/user_api"
 
-	organization_api "build-app/organization_api"
+	//organization_api "build-app/organization_api"
 
 	"log"
 	"net/http"
@@ -38,6 +38,9 @@ func main() {
 
 	initDB()
 
+	// Инициализация Gin
+	r := gin.Default()
+
 	// Регистрация эндпоинтов
 	r.POST("/register", user_api.RegisterUser(db))
 	r.GET("/register", user_api.RegisterUser(db)) // Временный GET для тестирования
@@ -54,7 +57,7 @@ func main() {
 		go fmt.Println(base.TimeNow() + "||-->>" + r.RemoteAddr + " GET exit")
 		os.Exit(0)
 	})
-	http.HandleFunc("/notify", func(w http.ResponseWriter, r *http.Request) {
+	/*http.HandleFunc("/notify", func(w http.ResponseWriter, r *http.Request) {
 		go fmt.Println(base.TimeNow() + "||-->>" + r.RemoteAddr + " GET notify")
 		db, err := sql.Open("mysql", DataBaseConn)
 		if err != nil {
@@ -63,7 +66,7 @@ func main() {
 		}
 		defer db.Close()
 		fmt.Fprintf(w, "All is good, bro")
-	})
+	})*/
 	
 
 	// Запуск сервера
