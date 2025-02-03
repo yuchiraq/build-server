@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"your-project/models"
+	"build-app/models"
 )
 
 // RegisterUser обрабатывает регистрацию нового пользователя

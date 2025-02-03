@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"build-app/base"
-	"build_app/user_api"
+	"build-app/user_api"
 
 	organization_api "build-app/organization_api"
 
@@ -20,23 +20,23 @@ import (
 	C.free(unsafe.Pointer(pointer))
 }*/
 
-var DataBaseConn = "chiraq:ekran11Series@/building"
+var db *sql.DB
+
+func initDB() {
+	var err error
+	db, err = sql.Open("mysql", "chiraq:ekran11Series@/building")
+	if err != nil {
+		log.Fatal(err)
+	}
+	if err = db.Ping(); err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Connected to database!")
+}
 
 func main() {
 
-	db, err := sql.Open("mysql", DataBaseConn)
-	if err != nil {
-		log.Fatalf("Failed to connect to database: %v", err)
-	}
-	defer db.Close()
-
-	// Проверка соединения с базой данных
-	if err := db.Ping(); err != nil {
-		log.Fatalf("Failed to ping database: %v", err)
-	}
-
-	// Инициализация Gin
-	r := gin.Default()
+	initDB()
 
 	// Регистрация эндпоинтов
 	r.POST("/register", user_api.RegisterUser(db))
