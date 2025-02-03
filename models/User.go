@@ -66,6 +66,7 @@ func GetUserByLogin(db *sql.DB, login string) (User, error) {
 
 // IsLoginAvailable проверяет, свободен ли логин
 func IsLoginAvailable(db *sql.DB, login string) (bool, error) {
+	var user User
 	query := `SELECT id, login FROM users WHERE login = ?`
 	err := db.QueryRow(query, login).Scan(&user.ID, &user.Login)
 	if err != nil {
