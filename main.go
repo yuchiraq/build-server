@@ -49,11 +49,11 @@ func main() {
 	r.GET("/check-login", user_api.CheckLoginAvailability(db)) // Проверка логина
 
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	r.GET("/", func(w http.ResponseWriter, r *http.Request) {
 		go fmt.Println(base.TimeNow() + "||-->>" + r.RemoteAddr + " GET hi")
 		fmt.Fprintf(w, "HI")
 	})
-	http.HandleFunc("/exit", func(w http.ResponseWriter, r *http.Request) {
+	r.GET("/exit", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "bue")
 		go fmt.Println(base.TimeNow() + "||-->>" + r.RemoteAddr + " GET exit")
 		os.Exit(0)
@@ -71,9 +71,8 @@ func main() {
 	
 
 	// Запуск сервера
-	if err := r.Run(":8090"); err != nil {
+	if err := r.Run(":8080"); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
 
-	log.Fatal(http.ListenAndServe(":8080", nil))
 }

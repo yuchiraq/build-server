@@ -35,7 +35,7 @@ func RegisterUser(db *sql.DB) gin.HandlerFunc {
 		// Проверка, что логин не занят
 		available, err := models.IsLoginAvailable(db, user.Login)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to check login availability"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to check login availability" + err})
 			return
 		}
 		if !available {
@@ -97,7 +97,7 @@ func CheckLoginAvailability(db *sql.DB) gin.HandlerFunc {
 
 		available, err := models.IsLoginAvailable(db, login)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to check login availability"})
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to check login availability" + err})
 			return
 		}
 
