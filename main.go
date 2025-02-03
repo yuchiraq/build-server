@@ -38,11 +38,11 @@ func main() {
 
 	initDB()
 
-	// Регистрация эндпоинтов
+	// Р РµРіРёСЃС‚СЂР°С†РёСЏ СЌРЅРґРїРѕРёРЅС‚РѕРІ
 	r.POST("/register", user_api.RegisterUser(db))
-	r.GET("/register", user_api.RegisterUser(db)) // Временный GET для тестирования
+	r.GET("/register", user_api.RegisterUser(db)) // Р’СЂРµРјРµРЅРЅС‹Р№ GET РґР»СЏ С‚РµСЃС‚РёСЂРѕРІР°РЅРёСЏ
 	r.POST("/login", user_api.LoginUser(db))
-	r.GET("/check-login", user_api.CheckLoginAvailability(db)) // Проверка логина
+	r.GET("/check-login", user_api.CheckLoginAvailability(db)) // РџСЂРѕРІРµСЂРєР° Р»РѕРіРёРЅР°
 
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -66,7 +66,7 @@ func main() {
 	})
 	
 
-	// Запуск сервера
+	// Р—Р°РїСѓСЃРє СЃРµСЂРІРµСЂР°
 	if err := r.Run(":8090"); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
