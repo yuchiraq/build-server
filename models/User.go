@@ -41,7 +41,7 @@ func CreateUser(db *sql.DB, user User) error {
 	}
 
 	query := `
-		INSERT INTO users (id, login, password, first_name, second_name, last_name, company_id)
+		INSERT INTO users (id, login, password, firstName, secondName, lastName, companyID)
 		VALUES (?, ?, ?, ?, ?, ?, ?)
 	`
 	_, err = db.Exec(query, user.ID, user.Login, hashedPassword, user.FirstName, user.SecondName, user.LastName, user.CompanyID)
@@ -55,7 +55,7 @@ func CreateUser(db *sql.DB, user User) error {
 // GetUserByLogin возвращает пользователя по логину
 func GetUserByLogin(db *sql.DB, login string) (User, error) {
 	var user User
-	query := `SELECT id, login, password, first_name, second_name, last_name, company_id FROM users WHERE login = ?`
+	query := `SELECT id, login, password, firstName, secondName, lastName, companyID FROM users WHERE login = ?`
 	err := db.QueryRow(query, login).Scan(&user.ID, &user.Login, &user.Password, &user.FirstName, &user.SecondName, &user.LastName, &user.CompanyID)
 	if err != nil {
 		fmt.Println("failed to check get user: %v", err)
