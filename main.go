@@ -49,13 +49,13 @@ func main() {
 	r.GET("/check-login", user_api.CheckLoginAvailability(db)) // Проверка логина
 
 
-	r.GET("/", func(w http.ResponseWriter, r *http.Request) {
-		go fmt.Println(base.TimeNow() + "||-->>" + r.RemoteAddr + " GET hi")
-		fmt.Fprintf(w, "HI")
+	r.GET("/", func() {
+		go fmt.Println(base.TimeNow() + "||-->>" + " GET hi")
+		c.JSON(http.StatusOK, gin.H{"HI": "available"})
 	})
-	r.GET("/exit", func(w http.ResponseWriter, r *http.Request) {
+	r.GET("/exit", func() {
 		fmt.Fprintf(w, "bue")
-		go fmt.Println(base.TimeNow() + "||-->>" + r.RemoteAddr + " GET exit")
+		c.JSON(http.StatusOK, gin.H{"available": "exit"})
 		os.Exit(0)
 	})
 	/*http.HandleFunc("/notify", func(w http.ResponseWriter, r *http.Request) {
