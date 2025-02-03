@@ -4,14 +4,13 @@ import (
 	"database/sql"
 	"fmt"
 
-	"build-app/base"
+	//"build-app/base"
 	"build-app/user_api"
 
 	//organization_api "build-app/organization_api"
 
 	"log"
 	"github.com/gin-gonic/gin"
-	"net/http"
 	"os"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -54,7 +53,9 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"HI": "available"})
 	})*/
 	r.GET("/exit", func() gin.HandlerFunc {
-		os.Exit(0)
+		return func(c *gin.Context){
+			os.Exit(0)
+		}
 	})
 	/*http.HandleFunc("/notify", func(w http.ResponseWriter, r *http.Request) {
 		go fmt.Println(base.TimeNow() + "||-->>" + r.RemoteAddr + " GET notify")
