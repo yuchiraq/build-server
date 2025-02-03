@@ -16,7 +16,7 @@ type User struct {
 	CompanyID  string `json:"companyID"`
 }
 
-// HashPassword хэширует пароль
+// HashPassword С…СЌС€РёСЂСѓРµС‚ РїР°СЂРѕР»СЊ
 func HashPassword(password string) (string, error) {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
@@ -25,14 +25,14 @@ func HashPassword(password string) (string, error) {
 	return string(hashedPassword), nil
 }
 
-// CheckPassword проверяет, совпадает ли пароль с хэшем
+// CheckPassword РїСЂРѕРІРµСЂСЏРµС‚, СЃРѕРІРїР°РґР°РµС‚ Р»Рё РїР°СЂРѕР»СЊ СЃ С…СЌС€РµРј
 func CheckPassword(hashedPassword, password string) error {
 	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 }
 
-// CreateUser добавляет нового пользователя в базу данных
+// CreateUser РґРѕР±Р°РІР»СЏРµС‚ РЅРѕРІРѕРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РІ Р±Р°Р·Сѓ РґР°РЅРЅС‹С…
 func CreateUser(db *sql.DB, user User) error {
-	// Хэшируем пароль
+	// РҐСЌС€РёСЂСѓРµРј РїР°СЂРѕР»СЊ
 	hashedPassword, err := HashPassword(user.Password)
 	if err != nil {
 		return fmt.Errorf("failed to hash password: %v", err)
@@ -49,7 +49,7 @@ func CreateUser(db *sql.DB, user User) error {
 	return nil
 }
 
-// GetUserByLogin возвращает пользователя по логину
+// GetUserByLogin РІРѕР·РІСЂР°С‰Р°РµС‚ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РїРѕ Р»РѕРіРёРЅСѓ
 func GetUserByLogin(db *sql.DB, login string) (User, error) {
 	var user User
 	query := `SELECT id, login, password, first_name, second_name, last_name, company_id FROM users WHERE login = ?`
@@ -60,14 +60,14 @@ func GetUserByLogin(db *sql.DB, login string) (User, error) {
 	return user, nil
 }
 
-// IsLoginAvailable проверяет, свободен ли логин
+// IsLoginAvailable РїСЂРѕРІРµСЂСЏРµС‚, СЃРІРѕР±РѕРґРµРЅ Р»Рё Р»РѕРіРёРЅ
 func IsLoginAvailable(db *sql.DB, login string) (bool, error) {
 	_, err := GetUserByLogin(db, login)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return true, nil // Логин свободен
+			return true, nil // Р›РѕРіРёРЅ СЃРІРѕР±РѕРґРµРЅ
 		}
 		return false, fmt.Errorf("failed to check login: %v", err)
 	}
-	return false, nil // Логин занят
+	return false, nil // Р›РѕРіРёРЅ Р·Р°РЅСЏС‚
 }

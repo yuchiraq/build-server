@@ -8,12 +8,12 @@ import (
 	"build-app/models"
 )
 
-// RegisterUser обрабатывает регистрацию нового пользователя
+// RegisterUser РѕР±СЂР°Р±Р°С‚С‹РІР°РµС‚ СЂРµРіРёСЃС‚СЂР°С†РёСЋ РЅРѕРІРѕРіРѕ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
 func RegisterUser(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var user models.User
 
-		// Для GET-запроса (временное решение для тестирования)
+		// Р”Р»СЏ GET-Р·Р°РїСЂРѕСЃР° (РІСЂРµРјРµРЅРЅРѕРµ СЂРµС€РµРЅРёРµ РґР»СЏ С‚РµСЃС‚РёСЂРѕРІР°РЅРёСЏ)
 		if c.Request.Method == http.MethodGet {
 			user = models.User{
 				ID:         c.Query("id"),
@@ -25,14 +25,14 @@ func RegisterUser(db *sql.DB) gin.HandlerFunc {
 				CompanyID:  c.Query("companyID"),
 			}
 		} else {
-			// Для POST-запроса
+			// Р”Р»СЏ POST-Р·Р°РїСЂРѕСЃР°
 			if err := c.ShouldBindJSON(&user); err != nil {
 				c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request payload"})
 				return
 			}
 		}
 
-		// Проверка, что логин не занят
+		// РџСЂРѕРІРµСЂРєР°, С‡С‚Рѕ Р»РѕРіРёРЅ РЅРµ Р·Р°РЅСЏС‚
 		available, err := models.IsLoginAvailable(db, user.Login)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to check login availability"})
@@ -43,7 +43,7 @@ func RegisterUser(db *sql.DB) gin.HandlerFunc {
 			return
 		}
 
-		// Создание пользователя
+		// РЎРѕР·РґР°РЅРёРµ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
 		if err := models.CreateUser(db, user); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
 			return
@@ -53,7 +53,7 @@ func RegisterUser(db *sql.DB) gin.HandlerFunc {
 	}
 }
 
-// LoginUser обрабатывает авторизацию пользователя
+// LoginUser РѕР±СЂР°Р±Р°С‚С‹РІР°РµС‚ Р°РІС‚РѕСЂРёР·Р°С†РёСЋ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ
 func LoginUser(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var input struct {
@@ -66,27 +66,27 @@ func LoginUser(db *sql.DB) gin.HandlerFunc {
 			return
 		}
 
-		// Поиск пользователя по логину
+		// РџРѕРёСЃРє РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ РїРѕ Р»РѕРіРёРЅСѓ
 		user, err := models.GetUserByLogin(db, input.Login)
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid login or password"})
 			return
 		}
 
-		// Проверка пароля
+		// РџСЂРѕРІРµСЂРєР° РїР°СЂРѕР»СЏ
 		if err := models.CheckPassword(user.Password, input.Password); err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid login or password"})
 			return
 		}
 
-		// Убираем пароль из ответа
+		// РЈР±РёСЂР°РµРј РїР°СЂРѕР»СЊ РёР· РѕС‚РІРµС‚Р°
 		user.Password = ""
 
 		c.JSON(http.StatusOK, gin.H{"message": "Login successful", "user": user})
 	}
 }
 
-// CheckLoginAvailability проверяет, свободен ли логин
+// CheckLoginAvailability РїСЂРѕРІРµСЂСЏРµС‚, СЃРІРѕР±РѕРґРµРЅ Р»Рё Р»РѕРіРёРЅ
 func CheckLoginAvailability(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		login := c.Query("login")
