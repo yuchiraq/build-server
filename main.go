@@ -52,11 +52,11 @@ func main() {
 		go fmt.Println(base.TimeNow() + "||-->>" + " GET hi")
 		c.JSON(http.StatusOK, gin.H{"HI": "available"})
 	})*/
-	r.GET("/exit", func() gin.HandlerFunc {
+	/*r.GET("/exit", func() gin.HandlerFunc {
 		return func(c *gin.Context){
 			os.Exit(0)
 		}
-	})
+	})*/
 	/*http.HandleFunc("/notify", func(w http.ResponseWriter, r *http.Request) {
 		go fmt.Println(base.TimeNow() + "||-->>" + r.RemoteAddr + " GET notify")
 		db, err := sql.Open("mysql", DataBaseConn)
