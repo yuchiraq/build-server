@@ -58,7 +58,7 @@ func GetUserByLogin(db *sql.DB, login string) (User, error) {
 	query := `SELECT id, login, password, firstName, secondName, lastName, companyID FROM users WHERE login = ?`
 	err := db.QueryRow(query, login).Scan(&user.ID, &user.Login, &user.Password, &user.FirstName, &user.SecondName, &user.LastName, &user.CompanyID)
 	if err != nil {
-		fmt.Println("failed to check get user: %v", err)
+		fmt.Println("failed to get user: %v", err)
 		return User{}, fmt.Errorf("failed to get user: %v", err)
 	}
 	return user, nil
@@ -66,7 +66,8 @@ func GetUserByLogin(db *sql.DB, login string) (User, error) {
 
 // IsLoginAvailable проверяет, свободен ли логин
 func IsLoginAvailable(db *sql.DB, login string) (bool, error) {
-	_, err := GetUserByLogin(db, login)
+	query := `SELECT id, login FROM users WHERE login = ?`
+	err := db.QueryRow(query, login).Scan(&user.ID, &user.Login)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return true, nil // Логин свободен

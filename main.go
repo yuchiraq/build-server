@@ -70,7 +70,7 @@ func main() {
 	
 
 	// Запуск сервера
-	if err := r.Run(":8082"); err != nil {
+	if err := r.Run(":8083"); err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
 
