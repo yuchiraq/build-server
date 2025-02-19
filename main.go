@@ -3,49 +3,54 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 
-	//"build-app/base"
 	"build-app/user_api"
 
-	//organization_api "build-app/organization_api"
-
-	"log"
-
 	"github.com/gin-gonic/gin"
-
-	//"os"
 	_ "github.com/go-sql-driver/mysql"
 )
 
-//export FreeMemory
-/*func FreeMemory(pointer *int64) {
-	C.free(unsafe.Pointer(pointer))
-}*/
-
 var db *sql.DB
 
+// initDB инициализирует подключение к базе данных
 func initDB() {
 	var err error
 	db, err = sql.Open("mysql", "chiraq:ekran11Series@/building")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Failed to connect to database: %v", err)
 	}
+
+	// Проверка соединения с базой данных
 	if err = db.Ping(); err != nil {
-		log.Fatal(err)
+		log.Fatalf("Failed to ping database: %v", err)
 	}
 	fmt.Println("Connected to database!")
 }
 
 func main() {
-
+	// Инициализация базы данных
 	initDB()
 
 	// Инициализация Gin
 	r := gin.Default()
+
+	// Обслуживание статических файлов (включая favicon)
+	r.Static("/static", "./static")
+
+	// Middleware для favicon
+	r.Use(func(c *gin.Context) {
+		if c.Request.URL.Path == "/favicon.ico" {
+			c.File("./static/favicon.ico")
+			c.Abort()
+			return
+		}
+		c.Next()
+	})
 
 	// Регистрация эндпоинтов
 	r.POST("/register", user_api.RegisterUser(db))
@@ -57,6 +62,7 @@ func main() {
 	// Эндпоинт для выключения сервера (GET)
 	shutdown := make(chan struct{})
 	r.GET("/shutdown", func(c *gin.Context) {
+		log.Println("Shutdown endpoint called")
 		c.JSON(http.StatusOK, gin.H{"message": "Server is shutting down..."})
 		close(shutdown) // Сигнализируем о завершении работы
 	})
@@ -68,10 +74,12 @@ func main() {
 	}
 
 	go func() {
+		log.Println("Starting server on :8080...")
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("Failed to start server: %v", err)
 		}
 	}()
+
 	// Ожидание сигнала завершения
 	select {
 	case <-shutdown:
