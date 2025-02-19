@@ -4,8 +4,9 @@ import (
 	"database/sql"
 	"net/http"
 
-	"github.com/gin-gonic/gin"
 	"build-app/models"
+
+	"github.com/gin-gonic/gin"
 )
 
 // RegisterUser обрабатывает регистрацию нового пользователя
@@ -35,7 +36,7 @@ func RegisterUser(db *sql.DB) gin.HandlerFunc {
 		// Проверка, что логин не занят
 		available, err := models.IsLoginAvailable(db, user.Login)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to check login availability" })
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to check login availability"})
 			return
 		}
 		if !available {
@@ -57,13 +58,20 @@ func RegisterUser(db *sql.DB) gin.HandlerFunc {
 func LoginUser(db *sql.DB) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var input struct {
-			Login    string `json:"login"`
-			Password string `json:"password"`
+			Login    string `json:"login" form:"login"`
+			Password string `json:"password" form:"password"`
 		}
 
-		if err := c.ShouldBindJSON(&input); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request payload"})
-			return
+		// Для GET-запроса
+		if c.Request.Method == http.MethodGet {
+			input.Login = c.Query("login")
+			input.Password = c.Query("password")
+		} else {
+			// Для POST-запроса
+			if err := c.ShouldBind(&input); err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request payload"})
+				return
+			}
 		}
 
 		// Поиск пользователя по логину
