@@ -24,3 +24,8 @@ go.work.sum
 # env file
 .env
 /.vs
+.go.mod.swn
+.go.mod.swo
+.go.mod.swp
+go.sum
+user_api/.auth.go.swp
