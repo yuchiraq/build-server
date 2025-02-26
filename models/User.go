@@ -49,6 +49,7 @@ func CreateUser(db *sql.DB, user User) error {
 		fmt.Println("failed to create user: %v", err)
 		return fmt.Errorf("failed to create user: %v", err)
 	}
+	fmt.Println("User: ", user.Login, "password: ", user.Password)
 	return nil
 }
 
