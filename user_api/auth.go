@@ -16,7 +16,7 @@ func RegisterUser(db *sql.DB) gin.HandlerFunc {
 		// Для GET-запроса (временное решение для тестирования)
 		if c.Request.Method == http.MethodGet {
 			user = models.User{
-				ID:         c.Query("id"),
+				//ID:         c.Query("id"),
 				Login:      c.Query("login"),
 				Password:   c.Query("password"),
 				FirstName:  c.Query("firstName"),

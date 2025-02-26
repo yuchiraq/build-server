@@ -41,10 +41,10 @@ func CreateUser(db *sql.DB, user User) error {
 	}
 
 	query := `
-		INSERT INTO users (id, login, password, firstName, secondName, lastName, companyID)
-		VALUES (?, ?, ?, ?, ?, ?, ?)
+		INSERT INTO users (login, password, firstName, secondName, lastName, companyID)
+		VALUES (?, ?, ?, ?, ?, ?)
 	`
-	_, err = db.Exec(query, user.ID, user.Login, hashedPassword, user.FirstName, user.SecondName, user.LastName, user.CompanyID)
+	_, err = db.Exec(query, user.Login, hashedPassword, user.FirstName, user.SecondName, user.LastName, user.CompanyID)
 	if err != nil {
 		fmt.Println("failed to create user: %v", err)
 		return fmt.Errorf("failed to create user: %v", err)
