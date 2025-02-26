@@ -1,6 +1,7 @@
 package user_api
 
 import (
+	"fmt"
 	"database/sql"
 	"net/http"
 
