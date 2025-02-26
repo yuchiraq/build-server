@@ -11,47 +11,49 @@ import (
 
 // RegisterUser обрабатывает регистрацию нового пользователя
 func RegisterUser(db *sql.DB) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		var user models.User
+    return func(c *gin.Context) {
+        var user models.User
 
-		// Для GET-запроса (временное решение для тестирования)
-		if c.Request.Method == http.MethodGet {
-			user = models.User{
-				//ID:         c.Query("id"),
-				Login:      c.Query("login"),
-				Password:   c.Query("password"),
-				FirstName:  c.Query("firstName"),
-				SecondName: c.Query("secondName"),
-				LastName:   c.Query("lastName"),
-				CompanyID:  c.Query("companyID"),
-			}
-		} else {
-			// Для POST-запроса
-			if err := c.ShouldBindJSON(&user); err != nil {
-				c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request payload"})
-				return
-			}
-		}
+        // Для GET-запроса (временное решение для тестирования)
+        if c.Request.Method == http.MethodGet {
+            user = models.User{
+                Login:      c.Query("login"),
+                Password:   c.Query("password"),
+                FirstName:  c.Query("firstName"),
+                SecondName: c.Query("secondName"),
+                LastName:   c.Query("lastName"),
+                CompanyID:  c.Query("companyID"),
+            }
+        } else {
+            // Для POST-запроса
+            if err := c.ShouldBindJSON(&user); err != nil {
+                c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid request payload"})
+                return
+            }
+        }
 
-		// Проверка, что логин не занят
-		available, err := models.IsLoginAvailable(db, user.Login)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to check login availability"})
-			return
-		}
-		if !available {
-			c.JSON(http.StatusConflict, gin.H{"error": "Login already exists"})
-			return
-		}
+        // Логируем входящие данные
+        fmt.Println("Полученные данные:", user)
 
-		// Создание пользователя
-		if err := models.CreateUser(db, user); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
-			return
-		}
+        // Проверка, что логин не занят
+        available, err := models.IsLoginAvailable(db, user.Login)
+        if err != nil {
+            c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to check login availability"})
+            return
+        }
+        if !available {
+            c.JSON(http.StatusConflict, gin.H{"error": "Login already exists"})
+            return
+        }
 
-		c.JSON(http.StatusOK, gin.H{"message": "User created successfully"})
-	}
+        // Создание пользователя
+        if err := models.CreateUser(db, user); err != nil {
+            c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
+            return
+        }
+
+        c.JSON(http.StatusOK, gin.H{"message": "User created successfully"})
+    }
 }
 
 // LoginUser обрабатывает авторизацию пользователя
