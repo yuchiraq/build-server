@@ -34,6 +34,7 @@ func CheckPassword(hashedPassword, password string) error {
 // CreateUser добавляет нового пользователя в базу данных
 func CreateUser(db *sql.DB, user User) error {
 	// Хэшируем пароль
+	fmt.Println("User: ", user.Login, "password: ", user.Password)
 	hashedPassword, err := HashPassword(user.Password)
 	if err != nil {
 		fmt.Println("failed to hash password: %v", err)
@@ -49,7 +50,6 @@ func CreateUser(db *sql.DB, user User) error {
 		fmt.Println("failed to create user: %v", err)
 		return fmt.Errorf("failed to create user: %v", err)
 	}
-	fmt.Println("User: ", user.Login, "password: ", user.Password)
 	return nil
 }
 
